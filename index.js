@@ -40,8 +40,8 @@ app.post('/task', (req, res) => {
         var task = new Task({
             title: req.body.title,
             description: req.body.description,
-            user: user.id,
-            subTasks:req.body.subTasks
+            user: user._id,
+            subTasks: req.body.subTasks
         });
 
         task.save((err, task) => {
@@ -56,13 +56,22 @@ app.post('/task', (req, res) => {
 
 app.get('/tasks', (req, res) => {
     var Task = req.TaskModel;
-    Task.find({}, (err, taskList) => {
-        if (err) {
-            res.status(500).json(err);
-        }
+    // Task.find({}, (err, taskList) => {
+    //     if (err) {
+    //         res.status(500).json(err);
+    //     }
 
-        res.status(200).json(taskList);
-    })
+    //     res.status(200).json(taskList);
+    // })
+    Task.find({})
+        .populate('user')
+        .exec((err, taskList) => {
+            if (err) {
+                res.status(500).json(err);
+            }
+            res.status(200).json(taskList);
+        });
+
 });
 
 
