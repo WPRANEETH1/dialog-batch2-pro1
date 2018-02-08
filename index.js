@@ -4,10 +4,13 @@ var mongoose = require('mongoose');
 var Webtask = require('webtask-tools');
 var app = Express();
 var path = require('path');
-
+var cors = require('cors')
 // var Task = require('./models/Task');
 // var User = require('./models/User');
 // connect DB
+
+app.use(cors());
+
 
 app.use(require(path.resolve(__dirname, './middlewares/db')).connectDisconnect);
 
