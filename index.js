@@ -40,7 +40,8 @@ app.post('/task', (req, res) => {
         var task = new Task({
             title: req.body.title,
             description: req.body.description,
-            user: user.id
+            user: user.id,
+            subTasks:req.body.subTasks
         });
 
         task.save((err, task) => {
