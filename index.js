@@ -9,19 +9,19 @@ var path = require('path');
 // var User = require('./models/User');
 // connect DB
 
-app.use(require( path.resolve( __dirname, './middlewares/db' ) ).connectDisconnect);
+app.use(require(path.resolve(__dirname, './middlewares/db')).connectDisconnect);
 
 // mongoose.connect('mongodb://root:root@ds153577.mlab.com:53577/tasks');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/hello', (req,res)=>{
+app.get('/hello', (req, res) => {
     var name = req.query.name;
     res.send(`Hello ${name}`)
 });
 
-app.post('/task',(req,res)=>{
+app.post('/task', (req, res) => {
     // create user
     var Task = req.TaskModel;
     var User = req.UserModel;
@@ -29,8 +29,8 @@ app.post('/task',(req,res)=>{
     user.username = req.body.user.username;
     user.email = req.body.user.email;
 
-    user.save((err,user)=>{
-        if(err){
+    user.save((err, user) => {
+        if (err) {
             res.status(500).json(err);
         }
 
@@ -40,18 +40,29 @@ app.post('/task',(req,res)=>{
             user: user.id
         });
 
-        task.save((err,task)=>{
-            if(err){
+        task.save((err, task) => {
+            if (err) {
                 res.status(500).json(err);
             }
 
-            res.status(200).json({ user : user , task: task})
+            res.status(200).json({ user: user, task: task })
         })
     });
-})
+});
+
+app.get('/tasks', (req, res) => {
+    var Task = req.TaskModel;
+    Task.find({}, (err, taskList) => {
+        if (err) {
+            res.status(500).json(err);
+        }
+
+        res.status(200).json(taskList);
+    })
+});
 
 
-// app.listen(3000,()=>{
-//     console.log('App started at port 3000');
-// });
-module.exports = Webtask.fromExpress(app);
+app.listen(3000, () => {
+    console.log('App started at port 3000');
+});
+// module.exports = Webtask.fromExpress(app);

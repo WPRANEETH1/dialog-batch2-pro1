@@ -1,4 +1,4 @@
-
+var mongoose = require('mongoose');
 const TaskSchema = require('../models/Task')
 const UserSchema = require('../models/User')
 module.exports = {
